@@ -57,7 +57,7 @@ jobs:
             GH_NEXT_PUBLIC_AMP_ID=81d0fc2014ce14eed5a475efe9a44035
             GH_NEXT_PUBLIC_GA_ID=G-FT28TL1W3M
             GH_IPFS_PIN_URL=https://test-pin.crustcloud.io/psa
-            GH_NEXT_WEB3AUTH_CLIENT_ID=BLxj7JujmtinIZnqY0f6NL_tZaQGwiktzxLgJJMzOEKhJIKANng6G-5UbxmkUwrflLNSe23_ZTG4f3krwweqRFA
+            GH_NEXT_WEB3AUTH_CLIENT_ID=BEnv-EbGo1XV_RsbyJ7dnxjjdo29FDVjk4YrhlPmtPDT7hqgp5jC44CVK9psN5RzZvRZ0uygKEAEoMYbRQXZZcQ
           tags: |
             ${{ env.image }}
           cache-from: type=local,src=/tmp/.buildx-cache
