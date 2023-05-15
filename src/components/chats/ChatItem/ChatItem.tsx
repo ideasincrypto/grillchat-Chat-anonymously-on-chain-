@@ -159,7 +159,7 @@ export default function ChatItem({
       {!isMyMessage && (
         <AddressAvatar
           address={ownerId}
-          avatar={authUser!.profilePic}
+          avatar={authUser?.profilePic ?? ''}
           className='flex-shrink-0'
         />
       )}
