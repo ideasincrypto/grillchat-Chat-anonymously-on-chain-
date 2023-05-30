@@ -23,7 +23,7 @@ export default function HotChatsContent({
 
   return (
     <ChannelPreviewList
-      chats={searchResults}
+      channels={searchResults}
       focusedElementIndex={focusedElementIndex}
     />
   )

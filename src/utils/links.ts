@@ -16,24 +16,24 @@ export function getCurrentUrlWithoutQuery() {
 }
 
 type CurrentPath = { query: ParsedUrlQuery }
-function getSpaceIdFromUrl(currentPath: CurrentPath) {
+function getHubIdFromUrl(currentPath: CurrentPath) {
   return currentPath.query.spaceId as string
 }
 
-export function getHomePageLink(currentPath: CurrentPath) {
-  const spaceId = getSpaceIdFromUrl(currentPath)
+export function getHubChannelListPageLink(currentPath: CurrentPath) {
+  const spaceId = getHubIdFromUrl(currentPath)
   return `/${spaceId ?? ''}`
 }
 
-export function getChatPageLink(
+export function getChannelPageLink(
   currentPath: CurrentPath,
-  chatSlug?: string,
-  defaultSpaceId?: string
+  channelSlug?: string,
+  defaultHubId?: string
 ) {
-  const spaceId = getSpaceIdFromUrl(currentPath) ?? defaultSpaceId
+  const hubId = getHubIdFromUrl(currentPath) ?? defaultHubId
   const currentSlug = currentPath.query.slug
-  if (!chatSlug && typeof currentSlug === 'string') {
-    chatSlug = currentSlug
+  if (!channelSlug && typeof currentSlug === 'string') {
+    channelSlug = currentSlug
   }
-  return `/${spaceId}/${chatSlug}`
+  return `/${hubId}/${channelSlug}`
 }

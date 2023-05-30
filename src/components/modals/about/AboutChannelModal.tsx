@@ -5,7 +5,7 @@ import {
   FollowPostWrapper,
   UnfollowPostWrapper,
 } from '@/services/subsocial/posts/mutation'
-import { getChatPageLink, getCurrentUrlOrigin } from '@/utils/links'
+import { getChannelPageLink, getCurrentUrlOrigin } from '@/utils/links'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { HiCircleStack } from 'react-icons/hi2'
@@ -36,7 +36,7 @@ export default function AboutChannelModal({
   const content = chat?.content
   if (!content) return null
 
-  const chatUrl = urlJoin(getCurrentUrlOrigin(), getChatPageLink(router))
+  const chatUrl = urlJoin(getCurrentUrlOrigin(), getChannelPageLink(router))
 
   const contentList: AboutModalProps['contentList'] = [
     { title: 'Description', content: content.body },

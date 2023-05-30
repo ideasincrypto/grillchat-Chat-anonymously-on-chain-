@@ -8,7 +8,7 @@ import { isOptimisticId } from '@/services/subsocial/utils'
 import { useSendEvent } from '@/stores/analytics'
 import { cx } from '@/utils/class-names'
 import { getTimeRelativeToNow } from '@/utils/date'
-import { getChatPageLink, getCurrentUrlOrigin } from '@/utils/links'
+import { getChannelPageLink, getCurrentUrlOrigin } from '@/utils/links'
 import { copyToClipboard } from '@/utils/strings'
 import { PostData } from '@subsocial/api/types'
 import { useRouter } from 'next/router'
@@ -104,7 +104,7 @@ export default function Message({
         onClick: () => {
           const chatPageLink = urlJoin(
             getCurrentUrlOrigin(),
-            getChatPageLink(router)
+            getChannelPageLink(router)
           )
           copyToClipboard(urlJoin(chatPageLink, messageId))
           toast.custom((t) => (

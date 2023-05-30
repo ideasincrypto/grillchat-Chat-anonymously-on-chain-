@@ -9,7 +9,7 @@ import { getPostQuery } from '@/services/api/query'
 import { useCommentIdsByPostId } from '@/services/subsocial/commentIds'
 import { useMyAccount } from '@/stores/my-account'
 import { cx } from '@/utils/class-names'
-import { getChatPageLink, getUrlQuery } from '@/utils/links'
+import { getChannelPageLink, getUrlQuery } from '@/utils/links'
 import { validateNumber } from '@/utils/strings'
 import { replaceUrl } from '@/utils/window'
 import { useRouter } from 'next/router'
@@ -139,9 +139,9 @@ function MessageListContent({
 
   useEffect(() => {
     if (messageModalMsgId) {
-      replaceUrl(urlJoin(getChatPageLink(router), `/${messageModalMsgId}`))
+      replaceUrl(urlJoin(getChannelPageLink(router), `/${messageModalMsgId}`))
     } else if (prevMessageModalMsgId && !messageModalMsgId) {
-      replaceUrl(getChatPageLink(router))
+      replaceUrl(getChannelPageLink(router))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prevMessageModalMsgId, messageModalMsgId])

@@ -1,5 +1,5 @@
 import { getSpaceQuery } from '@/services/subsocial/spaces'
-import { getCurrentUrlOrigin, getHomePageLink } from '@/utils/links'
+import { getCurrentUrlOrigin, getHubChannelListPageLink } from '@/utils/links'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { HiCircleStack } from 'react-icons/hi2'
@@ -25,7 +25,10 @@ export default function AboutHubModal({
   const content = hub?.content
   if (!content) return null
 
-  const hubUrl = urlJoin(getCurrentUrlOrigin(), getHomePageLink(router))
+  const hubUrl = urlJoin(
+    getCurrentUrlOrigin(),
+    getHubChannelListPageLink(router)
+  )
   const contentList: AboutModalProps['contentList'] = [
     { title: 'Description', content: content.about },
     {

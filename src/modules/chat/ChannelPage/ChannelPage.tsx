@@ -10,9 +10,9 @@ import { useCommentIdsByPostId } from '@/services/subsocial/commentIds'
 import { cx, getCommonClassNames } from '@/utils/class-names'
 import { getIpfsContentUrl } from '@/utils/ipfs'
 import {
-  getChatPageLink,
+  getChannelPageLink,
   getCurrentUrlWithoutQuery,
-  getHomePageLink,
+  getHubChannelListPageLink,
   getUrlQuery,
 } from '@/utils/links'
 import { replaceUrl } from '@/utils/window'
@@ -64,7 +64,7 @@ export default function ChannelPage({
       withFixedHeight
       navbarProps={{
         backButtonProps: {
-          defaultBackLink: getHomePageLink(router),
+          defaultBackLink: getHubChannelListPageLink(router),
         },
         customContent: ({ backButton, authComponent, colorModeToggler }) => (
           <div className='flex items-center justify-between gap-4'>
@@ -120,7 +120,7 @@ function NavbarChatInfo({
       return
     }
 
-    const baseUrl = getChatPageLink(routerRef.current)
+    const baseUrl = getChannelPageLink(routerRef.current)
     if (isOpenAboutChatModal) {
       replaceUrl(urlJoin(baseUrl, '/about'))
     } else if (!isOpenAboutChatModal && prevIsOpenAboutChatModal) {

@@ -45,7 +45,7 @@ export default function MyChatsContent({
 
   return (
     <ChannelPreviewList
-      chats={searchResults}
+      channels={searchResults}
       focusedElementIndex={focusedElementIndex}
     />
   )

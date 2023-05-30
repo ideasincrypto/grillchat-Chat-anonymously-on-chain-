@@ -2,7 +2,7 @@ import { getAliasFromHubId } from '@/constants/chat'
 import useIsInIframe from '@/hooks/useIsInIframe'
 import { useSendEvent } from '@/stores/analytics'
 import { getIpfsContentUrl } from '@/utils/ipfs'
-import { getChatPageLink } from '@/utils/links'
+import { getChannelPageLink } from '@/utils/links'
 import { createSlug } from '@/utils/slug'
 import { PostData } from '@subsocial/api/types'
 import { useRouter } from 'next/router'
@@ -11,22 +11,22 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import ChannelPreview from './ChannelPreview/ChannelPreview'
 
 export type ChannelPreviewListProps = ComponentProps<'div'> & {
-  chats: (PostData | undefined | null)[]
+  channels: (PostData | undefined | null)[]
   focusedElementIndex?: number
 }
 
 export default function ChannelPreviewList({
-  chats,
+  channels,
   focusedElementIndex,
 }: ChannelPreviewListProps) {
   return (
     <div className='flex flex-col'>
-      {chats.map((chat, idx) => {
+      {channels.map((chat, idx) => {
         if (!chat) return null
         return (
-          <ChatPreviewContainer
+          <ChannelPreviewContainer
             isFocused={idx === focusedElementIndex}
-            chat={chat}
+            channel={chat}
             key={chat.id}
           />
         )
@@ -35,24 +35,24 @@ export default function ChannelPreviewList({
   )
 }
 
-function ChatPreviewContainer({
-  chat,
+function ChannelPreviewContainer({
+  channel,
   isFocused,
 }: {
-  chat: PostData
+  channel: PostData
   isFocused?: boolean
 }) {
   const sendEvent = useSendEvent()
   const isInIframe = useIsInIframe()
   const router = useRouter()
 
-  const content = chat?.content
+  const content = channel?.content
 
-  const hubId = chat.struct.spaceId
+  const hubId = channel.struct.spaceId
   const aliasOrHub = getAliasFromHubId(hubId ?? '') ?? hubId
-  const linkTo = getChatPageLink(
+  const linkTo = getChannelPageLink(
     router,
-    createSlug(chat.id, { title: content?.title }),
+    createSlug(channel.id, { title: content?.title }),
     aliasOrHub
   )
 
@@ -73,7 +73,7 @@ function ChatPreviewContainer({
   const onChatClick = () => {
     sendEvent(`click on chat`, {
       title: content?.title ?? '',
-      chatId: chat.id,
+      chatId: channel.id,
     })
   }
 
@@ -88,7 +88,7 @@ function ChatPreviewContainer({
       image={content?.image ? getIpfsContentUrl(content.image) : ''}
       title={content?.title ?? ''}
       description={content?.body ?? ''}
-      chatId={chat.id}
+      chatId={channel.id}
       hubId={hubId}
       withUnreadCount
       withFocusedStyle={isFocused}

@@ -63,7 +63,7 @@ export default function ChannelListPage({ hubId }: ChannelListPageProps) {
           <NoChannelsFound search={search} hubId={hubId} />
         )}
         <ChannelPreviewList
-          chats={searchResults}
+          channels={searchResults}
           focusedElementIndex={focusedElementIndex}
         />
       </div>

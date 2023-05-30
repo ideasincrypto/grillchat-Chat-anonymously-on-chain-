@@ -1,6 +1,6 @@
 import { getHubIdFromAlias } from '@/constants/chat'
 import { useCreateDiscussion } from '@/services/api/mutations'
-import { getChatPageLink, getUrlQuery } from '@/utils/links'
+import { getChannelPageLink, getUrlQuery } from '@/utils/links'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import ChannelPage, { ChannelPageProps } from './ChannelPage'
@@ -43,7 +43,7 @@ export default function StubChannelPage() {
         return
       }
 
-      router.replace(getChatPageLink(router, data?.postId))
+      router.replace(getChannelPageLink(router, data?.postId))
     }
 
     handleDiscussion()
