@@ -1,4 +1,4 @@
-import StubChatPage from '@/modules/chat/ChatPage/StubChatPage'
+import StubChannelPage from '@/modules/chat/ChannelPage/StubChannelPage'
 import { getDiscussion } from '@/pages/api/discussion'
 import { getCommonStaticProps } from '@/utils/page'
 import { GetStaticPaths } from 'next'
@@ -35,4 +35,4 @@ export const getStaticProps = getCommonStaticProps(
   }
 )
 
-export default StubChatPage
+export default StubChannelPage

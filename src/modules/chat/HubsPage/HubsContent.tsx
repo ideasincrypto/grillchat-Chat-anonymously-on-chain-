@@ -1,5 +1,5 @@
-import ChatPreview from '@/components/chats/ChatPreview'
-import { getAliasFromSpaceId } from '@/constants/chat-room'
+import ChannelPreview from '@/components/chats/ChannelPreview'
+import { getAliasFromHubId } from '@/constants/chat'
 import useIsInIframe from '@/hooks/useIsInIframe'
 import { getSpaceQuery } from '@/services/subsocial/spaces'
 import { useSendEvent } from '@/stores/analytics'
@@ -53,7 +53,7 @@ function ChatPreviewContainer({
   const isInIframe = useIsInIframe()
   const router = useRouter()
 
-  const path = getAliasFromSpaceId(hub.id) || hub.id
+  const path = getAliasFromHubId(hub.id) || hub.id
   const linkTo = `/${path}`
 
   const content = hub.content
@@ -79,7 +79,7 @@ function ChatPreviewContainer({
   }
 
   return (
-    <ChatPreview
+    <ChannelPreview
       isImageCircle={false}
       onClick={onChatClick}
       asContainer

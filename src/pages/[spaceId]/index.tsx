@@ -1,6 +1,8 @@
-import { getSpaceIdFromAlias } from '@/constants/chat-room'
-import HomePage, { HomePageProps } from '@/modules/chat/HomePage'
-import { prefetchChatPreviewsData } from '@/server/chats'
+import { getHubIdFromAlias } from '@/constants/chat'
+import ChannelListPage, {
+  ChannelListPageProps,
+} from '@/modules/chat/ChannelListPage'
+import { prefetchChannelPreviewsData } from '@/server/chats'
 import { getMainSpaceId } from '@/utils/env/client'
 import { getCommonStaticProps } from '@/utils/page'
 import { validateNumber } from '@/utils/strings'
@@ -19,7 +21,7 @@ function getSpaceIdFromParam(paramSpaceId: string) {
   const spaceIdOrAlias = paramSpaceId ?? getMainSpaceId()
   let spaceId = spaceIdOrAlias
   if (!validateNumber(spaceIdOrAlias)) {
-    const spaceIdFromAlias = getSpaceIdFromAlias(spaceIdOrAlias)
+    const spaceIdFromAlias = getHubIdFromAlias(spaceIdOrAlias)
     if (spaceIdFromAlias) {
       spaceId = spaceIdFromAlias
     } else {
@@ -30,7 +32,7 @@ function getSpaceIdFromParam(paramSpaceId: string) {
 }
 
 export const getStaticProps = getCommonStaticProps<
-  HomePageProps & AppCommonProps
+  ChannelListPageProps & AppCommonProps
 >(
   () => ({}),
   async (context) => {
@@ -41,7 +43,7 @@ export const getStaticProps = getCommonStaticProps<
     if (!spaceId) return undefined
 
     try {
-      await prefetchChatPreviewsData(queryClient, spaceId)
+      await prefetchChannelPreviewsData(queryClient, spaceId)
     } catch (e) {
       console.error('Error fetching for home page: ', e)
     }
@@ -55,4 +57,4 @@ export const getStaticProps = getCommonStaticProps<
     }
   }
 )
-export default HomePage
+export default ChannelListPage

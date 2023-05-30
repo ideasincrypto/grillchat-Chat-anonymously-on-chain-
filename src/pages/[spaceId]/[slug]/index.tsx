@@ -1,6 +1,5 @@
-import { CHAT_PER_PAGE } from '@/constants/chat'
-import { getSpaceIdFromAlias } from '@/constants/chat-room'
-import ChatPage, { ChatPageProps } from '@/modules/chat/ChatPage'
+import { getHubIdFromAlias, MESSAGES_PER_PAGE } from '@/constants/chat'
+import ChannelPage, { ChannelPageProps } from '@/modules/chat/ChannelPage'
 import { getPostsFromCache } from '@/pages/api/posts'
 import { AppCommonProps } from '@/pages/_app'
 import { prefetchBlockedEntities } from '@/server/moderation'
@@ -34,7 +33,7 @@ async function getChatsData(chatId: string) {
   const subsocialApi = await getSubsocialApi()
   const messageIds = await subsocialApi.blockchain.getReplyIdsByPostId(chatId)
 
-  const preloadedPostCount = CHAT_PER_PAGE * 2
+  const preloadedPostCount = MESSAGES_PER_PAGE * 2
   const startSlice = Math.max(0, messageIds.length - preloadedPostCount)
   const endSlice = messageIds.length
   const prefetchedMessageIds = messageIds.slice(startSlice, endSlice)
@@ -44,7 +43,7 @@ async function getChatsData(chatId: string) {
 }
 
 export const getStaticProps = getCommonStaticProps<
-  ChatPageProps & AppCommonProps
+  ChannelPageProps & AppCommonProps
 >(
   () => ({
     head: { disableZoom: true },
@@ -55,7 +54,7 @@ export const getStaticProps = getCommonStaticProps<
     const chatId = getValidatedChatId(slugParam)
     if (!chatId) return undefined
 
-    const spaceId = getSpaceIdFromAlias(spaceIdOrAlias) || spaceIdOrAlias
+    const spaceId = getHubIdFromAlias(spaceIdOrAlias) || spaceIdOrAlias
 
     const queryClient = new QueryClient()
 
@@ -97,4 +96,4 @@ export const getStaticProps = getCommonStaticProps<
   }
 )
 
-export default ChatPage
+export default ChannelPage

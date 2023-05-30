@@ -1,4 +1,4 @@
-import ChatSpecialButtons from '@/components/chats/ChatSpecialButtons'
+import ChannelListSpecialButtons from '@/components/chats/ChannelListSpecialButtons'
 import DefaultLayout from '@/components/layouts/DefaultLayout'
 import NavbarWithSearch from '@/components/navbar/Navbar/custom/NavbarWithSearch'
 import Tabs, { TabsProps } from '@/components/Tabs'
@@ -135,7 +135,7 @@ function HubsContentWrapper({
   return (
     <div className='flex flex-col'>
       {showSpecialButtons && !isInIframe && !search && (
-        <ChatSpecialButtons
+        <ChannelListSpecialButtons
           isIntegrateChatButtonOnTop={isIntegrateChatButtonOnTop}
         />
       )}

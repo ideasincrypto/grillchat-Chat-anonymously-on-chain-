@@ -1,4 +1,4 @@
-import { getLinkedChatIdsForSpaceId } from '@/constants/chat-room'
+import { getLinkedChannelIdsForHubId } from '@/constants/chat'
 import { getPostsFromCache } from '@/pages/api/posts'
 import { getPostQuery } from '@/services/api/query'
 import { getCommentIdsQueryKey } from '@/services/subsocial/commentIds'
@@ -9,18 +9,18 @@ import { PostData } from '@subsocial/api/types'
 import { QueryClient } from '@tanstack/react-query'
 import { prefetchBlockedEntities } from './moderation'
 
-export async function prefetchChatPreviewsData(
+export async function prefetchChannelPreviewsData(
   queryClient: QueryClient,
   hubId: string
 ) {
   const res = await getPostIdsBySpaceIdQuery.fetchQuery(queryClient, hubId)
   const allChatIds = [
     ...(res?.postIds ?? []),
-    ...getLinkedChatIdsForSpaceId(hubId),
+    ...getLinkedChannelIdsForHubId(hubId),
   ]
 
   const [{ lastMessages, chats, messageIdsByChatIds }] = await Promise.all([
-    getChatPreviewsData(allChatIds),
+    getChannelPreviewsData(allChatIds),
     prefetchBlockedEntities(queryClient, hubId, allChatIds),
     getSpaceQuery.fetchQuery(queryClient, hubId),
   ] as const)
@@ -40,7 +40,7 @@ export async function prefetchChatPreviewsData(
   })
 }
 
-export async function getChatPreviewsData(chatIds: string[]) {
+export async function getChannelPreviewsData(chatIds: string[]) {
   const subsocialApi = await getSubsocialApi()
 
   const [messageIdsByChatIds, chats] = await Promise.all([

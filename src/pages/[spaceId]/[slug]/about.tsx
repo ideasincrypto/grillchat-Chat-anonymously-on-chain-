@@ -1,4 +1,4 @@
-import AboutChatRedirectPage from '@/modules/chat/AboutChatRedirectPage'
+import AboutChannelRedirectPage from '@/modules/chat/AboutChannelRedirectPage'
 import { getPostsFromCache } from '@/pages/api/posts'
 import { AppCommonProps } from '@/pages/_app'
 import { getCommonStaticProps } from '@/utils/page'
@@ -41,4 +41,4 @@ export const getStaticProps = getCommonStaticProps<AppCommonProps>(
   }
 )
 
-export default AboutChatRedirectPage
+export default AboutChannelRedirectPage

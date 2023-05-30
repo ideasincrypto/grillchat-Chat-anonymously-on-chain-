@@ -3,7 +3,7 @@ import { cx } from '@/utils/class-names'
 import { CommentData } from '@subsocial/api/types'
 import { useState } from 'react'
 import Button from '../Button'
-import ChatItem from '../chats/ChatItem'
+import Message from '../chats/Message'
 import Modal, { ModalFunctionalityProps } from './Modal'
 
 export type MessageModalProps = ModalFunctionalityProps & {
@@ -50,7 +50,7 @@ export default function MessageModal({
         )}
       >
         {message && (
-          <ChatItem
+          <Message
             withCustomMenu={false}
             isMyMessage={false}
             message={message}

@@ -1,5 +1,5 @@
-import ChatPreviewList from '@/components/chats/ChatPreviewList'
-import NoChatsFound from '@/components/chats/NoChatsFound'
+import ChannelPreviewList from '@/components/chats/ChannelPreviewList'
+import NoChannelsFound from '@/components/chats/NoChannelsFound'
 import useSortedChats from '../hooks/useSortedChats'
 import { CommonHubContentProps } from './HubsPage'
 
@@ -18,11 +18,11 @@ export default function HotChatsContent({
   ])
 
   if (searchResults.length === 0) {
-    return <NoChatsFound search='' hubId={hubId} />
+    return <NoChannelsFound search='' hubId={hubId} />
   }
 
   return (
-    <ChatPreviewList
+    <ChannelPreviewList
       chats={searchResults}
       focusedElementIndex={focusedElementIndex}
     />

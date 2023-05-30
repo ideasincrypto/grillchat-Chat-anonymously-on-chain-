@@ -1,8 +1,8 @@
 import NoResultImage from '@/assets/graphics/no-result.png'
 import Button from '@/components/Button'
-import ChatPreviewList from '@/components/chats/ChatPreviewList'
-import ChatPreviewSkeleton from '@/components/chats/ChatPreviewSkeleton'
-import NoChatsFound from '@/components/chats/NoChatsFound'
+import ChannelPreviewList from '@/components/chats/ChannelPreviewList'
+import ChannelPreviewSkeleton from '@/components/chats/ChannelPreviewSkeleton'
+import NoChannelsFound from '@/components/chats/NoChannelsFound'
 import Container from '@/components/Container'
 import { getPostQuery } from '@/services/api/query'
 import { getFollowedPostIdsByAddressQuery } from '@/services/subsocial/posts'
@@ -39,12 +39,12 @@ export default function MyChatsContent({
   if (!isInitialized || isLoading) {
     return <Loading />
   } else if (!address || searchResults.length === 0) {
-    if (search) return <NoChatsFound search={search} />
+    if (search) return <NoChannelsFound search={search} />
     return <NoChats changeTab={changeTab} />
   }
 
   return (
-    <ChatPreviewList
+    <ChannelPreviewList
       chats={searchResults}
       focusedElementIndex={focusedElementIndex}
     />
@@ -54,9 +54,9 @@ export default function MyChatsContent({
 function Loading() {
   return (
     <div className='flex flex-col'>
-      <ChatPreviewSkeleton asContainer />
-      <ChatPreviewSkeleton asContainer />
-      <ChatPreviewSkeleton asContainer />
+      <ChannelPreviewSkeleton asContainer />
+      <ChannelPreviewSkeleton asContainer />
+      <ChannelPreviewSkeleton asContainer />
     </div>
   )
 }

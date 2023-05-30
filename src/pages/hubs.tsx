@@ -1,8 +1,8 @@
-import { getLinkedChatIdsForSpaceId } from '@/constants/chat-room'
+import { getLinkedChannelIdsForHubId } from '@/constants/chat'
 import HubsPage from '@/modules/chat/HubsPage'
 import { HubsPageProps } from '@/modules/chat/HubsPage/HubsPage'
 import { AppCommonProps } from '@/pages/_app'
-import { prefetchChatPreviewsData } from '@/server/chats'
+import { prefetchChannelPreviewsData } from '@/server/chats'
 import { getSpaceQuery } from '@/services/subsocial/spaces'
 import { getSubsocialApi } from '@/subsocial-query/subsocial/connection'
 import { getMainSpaceId, getSpaceIds } from '@/utils/env/client'
@@ -27,10 +27,10 @@ export const getStaticProps = getCommonStaticProps<
       })
 
       await Promise.all([
-        prefetchChatPreviewsData(queryClient, getMainSpaceId()),
+        prefetchChannelPreviewsData(queryClient, getMainSpaceId()),
         ...hubsData.map(async (hub) => {
           const chatIds = await subsocialApi.blockchain.postIdsBySpaceId(hub.id)
-          const linkedChats = getLinkedChatIdsForSpaceId(hub.id)
+          const linkedChats = getLinkedChannelIdsForHubId(hub.id)
           hubsChatCount[hub.id] = chatIds.length + linkedChats.length
         }),
       ])
