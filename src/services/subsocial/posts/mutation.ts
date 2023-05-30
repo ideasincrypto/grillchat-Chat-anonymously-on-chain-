@@ -6,16 +6,16 @@ import { useWalletGetter } from '../hooks'
 import { createMutationWrapper } from '../utils'
 import { getFollowedPostIdsByAddressQuery } from './query'
 
-export type JoinChatParams = {
+export type FollowPostParams = {
   chatId: string
 }
-export function useJoinChat(config?: MutationConfig<JoinChatParams>) {
+export function useFollowPost(config?: MutationConfig<FollowPostParams>) {
   const client = useQueryClient()
   const getWallet = useWalletGetter()
 
   const waitHasEnergy = useWaitHasEnergy()
 
-  return useSubsocialMutation<JoinChatParams, null>(
+  return useSubsocialMutation<FollowPostParams, null>(
     getWallet,
     async ({ chatId }, { substrateApi }) => {
       console.log('waiting energy...')
@@ -23,7 +23,7 @@ export function useJoinChat(config?: MutationConfig<JoinChatParams>) {
 
       return {
         tx: substrateApi.tx.postFollows.followPost(chatId),
-        summary: 'Joining chat',
+        summary: 'Following post',
       }
     },
     config,
@@ -47,21 +47,21 @@ export function useJoinChat(config?: MutationConfig<JoinChatParams>) {
     }
   )
 }
-export const JoinChatWrapper = createMutationWrapper(
-  useJoinChat,
+export const FollowPostWrapper = createMutationWrapper(
+  useFollowPost,
   'Failed to join chat'
 )
 
-export type LeaveChatParams = {
+export type UnfollowPostParams = {
   chatId: string
 }
-export function useLeaveChat(config?: MutationConfig<LeaveChatParams>) {
+export function useUnfollowPost(config?: MutationConfig<UnfollowPostParams>) {
   const client = useQueryClient()
   const getWallet = useWalletGetter()
 
   const waitHasEnergy = useWaitHasEnergy()
 
-  return useSubsocialMutation<JoinChatParams, null>(
+  return useSubsocialMutation<FollowPostParams, null>(
     getWallet,
     async ({ chatId }, { substrateApi }) => {
       console.log('waiting energy...')
@@ -69,7 +69,7 @@ export function useLeaveChat(config?: MutationConfig<LeaveChatParams>) {
 
       return {
         tx: substrateApi.tx.postFollows.unfollowPost(chatId),
-        summary: 'Leaving chat',
+        summary: 'Unfollowing Post',
       }
     },
     config,
@@ -93,7 +93,7 @@ export function useLeaveChat(config?: MutationConfig<LeaveChatParams>) {
     }
   )
 }
-export const LeaveChatWrapper = createMutationWrapper(
-  useLeaveChat,
+export const UnfollowPostWrapper = createMutationWrapper(
+  useUnfollowPost,
   'Failed to leave chat'
 )

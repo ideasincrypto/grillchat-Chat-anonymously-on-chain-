@@ -1,5 +1,5 @@
 import { useRequestToken } from '@/services/api/mutations'
-import { useSendMessage } from '@/services/subsocial/commentIds'
+import { useCreateComment } from '@/services/subsocial/commentIds'
 import { useMyAccount } from '@/stores/my-account'
 import { useMutation } from '@tanstack/react-query'
 
@@ -7,7 +7,7 @@ export default function useRequestTokenAndSendMessage() {
   const address = useMyAccount((state) => state.address)
 
   const { mutateAsync: requestToken } = useRequestToken()
-  const { mutateAsync: sendMessage } = useSendMessage()
+  const { mutateAsync: sendMessage } = useCreateComment()
   const login = useMyAccount((state) => state.login)
 
   const requestTokenAndSendMessage = async (

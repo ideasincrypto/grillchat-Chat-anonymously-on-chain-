@@ -11,7 +11,7 @@ import { generateOptimisticId } from '../utils'
 import { addOptimisticData, deleteOptimisticData } from './optimistic'
 import { OptimisticMessageIdData, SendMessageParams } from './types'
 
-export function useSendMessage(config?: MutationConfig<SendMessageParams>) {
+export function useCreateComment(config?: MutationConfig<SendMessageParams>) {
   const client = useQueryClient()
   const getWallet = useWalletGetter()
 
@@ -36,7 +36,7 @@ export function useSendMessage(config?: MutationConfig<SendMessageParams>) {
           { Comment: { parentId: null, rootPostId: params.chatId } },
           IpfsWrapper(cid)
         ),
-        summary: 'Sending message',
+        summary: 'Creating Comment',
       }
     },
     config,

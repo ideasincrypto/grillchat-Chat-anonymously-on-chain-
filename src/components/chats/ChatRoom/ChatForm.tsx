@@ -9,7 +9,7 @@ import useRequestTokenAndSendMessage from '@/hooks/useRequestTokenAndSendMessage
 import useToastError from '@/hooks/useToastError'
 import { ApiRequestTokenResponse } from '@/pages/api/request-token'
 import { getPostQuery } from '@/services/api/query'
-import { useSendMessage } from '@/services/subsocial/commentIds'
+import { useCreateComment } from '@/services/subsocial/commentIds'
 import { useSendEvent } from '@/stores/analytics'
 import { useMessageData } from '@/stores/message'
 import { useMyAccount } from '@/stores/my-account'
@@ -70,7 +70,7 @@ export default function ChatForm({
   )
 
   const [messageBody, setMessageBody] = useState('')
-  const { mutate: sendMessage, error } = useSendMessage()
+  const { mutate: sendMessage, error } = useCreateComment()
   useToastError(error, 'Message failed to send, please try again')
 
   const { enableInputAutofocus } = useConfigContext()

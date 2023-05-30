@@ -2,8 +2,8 @@ import Button from '@/components/Button'
 import useIsJoinedToChat from '@/hooks/useIsJoinedToChat'
 import { getPostQuery } from '@/services/api/query'
 import {
-  JoinChatWrapper,
-  LeaveChatWrapper,
+  FollowPostWrapper,
+  UnfollowPostWrapper,
 } from '@/services/subsocial/posts/mutation'
 import { getChatPageLink, getCurrentUrlOrigin } from '@/utils/links'
 import { useRouter } from 'next/router'
@@ -76,7 +76,7 @@ export default function AboutChatModal({
         imageCid={content?.image ?? ''}
         bottomElement={
           !isJoined && !isLoading ? (
-            <JoinChatWrapper>
+            <FollowPostWrapper>
               {({ mutateAsync, isLoading }) => (
                 <Button
                   size='lg'
@@ -87,11 +87,11 @@ export default function AboutChatModal({
                   Join
                 </Button>
               )}
-            </JoinChatWrapper>
+            </FollowPostWrapper>
           ) : null
         }
       />
-      <LeaveChatWrapper>
+      <UnfollowPostWrapper>
         {({ isLoading, mutateAsync }) => (
           <ConfirmationModal
             isOpen={isOpenConfirmation}
@@ -107,7 +107,7 @@ export default function AboutChatModal({
             }}
           />
         )}
-      </LeaveChatWrapper>
+      </UnfollowPostWrapper>
       <MetadataModal
         closeModal={() => setIsOpenMetadataModal(false)}
         isOpen={isOpenMetadataModal}

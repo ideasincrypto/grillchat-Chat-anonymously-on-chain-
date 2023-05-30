@@ -1,7 +1,7 @@
 import Button from '@/components/Button'
 import Container from '@/components/Container'
 import useIsJoinedToChat from '@/hooks/useIsJoinedToChat'
-import { JoinChatWrapper } from '@/services/subsocial/posts/mutation'
+import { FollowPostWrapper } from '@/services/subsocial/posts/mutation'
 import { cx } from '@/utils/class-names'
 import dynamic from 'next/dynamic'
 import { ComponentProps, useRef, useState } from 'react'
@@ -78,7 +78,7 @@ export default function ChatRoom({
             clearReplyTo={closeReply}
           />
         ) : (
-          <JoinChatWrapper>
+          <FollowPostWrapper>
             {({ isLoading, mutateAsync }) => (
               <Button
                 size='lg'
@@ -88,7 +88,7 @@ export default function ChatRoom({
                 Join
               </Button>
             )}
-          </JoinChatWrapper>
+          </FollowPostWrapper>
         )}
       </Component>
     </div>
