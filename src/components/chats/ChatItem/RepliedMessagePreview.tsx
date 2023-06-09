@@ -5,6 +5,7 @@ import { getPostQuery } from '@/services/api/query'
 import { getNftDataQuery } from '@/services/external/query'
 import { cx } from '@/utils/class-names'
 import { truncateText } from '@/utils/strings'
+import { useTheme } from 'next-themes'
 import { ComponentProps, useState } from 'react'
 
 export type RepliedMessagePreviewProps = ComponentProps<'div'> & {
@@ -12,6 +13,7 @@ export type RepliedMessagePreviewProps = ComponentProps<'div'> & {
   originalMessage: string
   minimumReplyChar?: number
   scrollToMessage?: (messageId: string) => Promise<void>
+  replyToExtension?: boolean
 }
 
 const MINIMUM_REPLY_CHAR = 35
@@ -20,12 +22,14 @@ export default function RepliedMessagePreview({
   originalMessage,
   scrollToMessage,
   minimumReplyChar = MINIMUM_REPLY_CHAR,
+  replyToExtension = false,
   ...props
 }: RepliedMessagePreviewProps) {
   const [isLoading, setIsLoading] = useState(false)
   const { data: message } = getPostQuery.useQuery(repliedMessageId)
   const replySender = message?.struct.ownerId
   const replySenderColor = useRandomColor(replySender)
+  const { theme } = useTheme()
 
   // TODO: extract to better flexibility for other extensions
   const extensions = message?.content?.extensions
@@ -45,6 +49,8 @@ export default function RepliedMessagePreview({
   }
 
   let showedText = messageContent ?? ''
+  const { id, properties } = message.content?.extensions?.[0] || {}
+
   if (originalMessage.length < minimumReplyChar) {
     showedText = truncateText(showedText, minimumReplyChar)
   }
@@ -55,6 +61,20 @@ export default function RepliedMessagePreview({
     await scrollToMessage(repliedMessageId)
     setIsLoading(false)
   }
+
+  const { amount, token } = properties || {}
+
+  const donateRepliedPreview =
+    id === 'subsocial-donations' ? (
+      <div
+        className={cx(
+          'bg-gradient-to-br from-[#C43333] to-[#F9A11E]',
+          'rounded-2xl px-3 py-[0.15rem] text-white'
+        )}
+      >
+        {amount} {token}
+      </div>
+    ) : null
 
   return (
     <div
@@ -80,11 +100,24 @@ export default function RepliedMessagePreview({
           image={nftData?.image}
         />
       )}
-      <div className='flex flex-col'>
+      <div className='flex flex-1 flex-col'>
         <Name ownerId={message?.struct.ownerId} className='font-medium' />
-        <span className='overflow-hidden overflow-ellipsis whitespace-nowrap opacity-75'>
-          {showedText}
-        </span>
+        <div
+          className={cx('flex items-center gap-2', {
+            ['text-white']: theme === 'light' && replyToExtension,
+          })}
+        >
+          <span
+            className={cx(
+              'overflow-hidden overflow-ellipsis whitespace-nowrap opacity-75',
+              {
+                ['text-white']: theme === 'light' && replyToExtension,
+              }
+            )}
+          >
+            {showedText}
+          </span>
+        </div>
       </div>
     </div>
   )

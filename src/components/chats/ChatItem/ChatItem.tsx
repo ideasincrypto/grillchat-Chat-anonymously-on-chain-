@@ -1,11 +1,16 @@
+import DonateCoinIcon from '@/assets/icons/donate-coin.svg'
 import AddressAvatar from '@/components/AddressAvatar'
 import FloatingMenus, {
   FloatingMenusProps,
 } from '@/components/floating/FloatingMenus'
+import DonateMessagePreview from '@/components/modals/donate/DonateMessagePreview'
+import DonateModal from '@/components/modals/donate/DonateModal'
 import Toast from '@/components/Toast'
+import { getAccountDataQuery } from '@/services/subsocial/evmAddresses'
 import { isOptimisticId } from '@/services/subsocial/utils'
 import { useSendEvent } from '@/stores/analytics'
 import { useMessageData } from '@/stores/message'
+import { useMyAccount } from '@/stores/my-account'
 import { cx } from '@/utils/class-names'
 import { getTimeRelativeToNow } from '@/utils/date'
 import { getChatPageLink, getCurrentUrlOrigin } from '@/utils/links'
@@ -19,7 +24,6 @@ import { HiCircleStack, HiLink } from 'react-icons/hi2'
 import { MdContentCopy } from 'react-icons/md'
 import urlJoin from 'url-join'
 import MetadataModal from '../../modals/MetadataModal'
-import ChatItemWithExtension from './ChatItemWithExtension'
 import CheckMarkExplanationModal, {
   CheckMarkModalVariant,
 } from './CheckMarkExplanationModal'
@@ -28,12 +32,17 @@ import EmojiChatItem, {
   shouldRenderEmojiChatItem,
 } from './variants/EmojiChatItem'
 
+const extensionsVariants: Record<string, (props: any) => JSX.Element> = {
+  'subsocial-donations': DonateMessagePreview,
+}
+
 export type ChatItemProps = Omit<ComponentProps<'div'>, 'children'> & {
   message: PostData
   isMyMessage: boolean
   messageBubbleId?: string
   scrollToMessage?: (chatId: string) => Promise<void>
   withCustomMenu?: boolean
+  chatId: string
 }
 
 type CheckMarkModalReducerState = {
@@ -56,6 +65,7 @@ export default function ChatItem({
   scrollToMessage,
   messageBubbleId,
   withCustomMenu = true,
+  chatId,
   ...props
 }: ChatItemProps) {
   const setReplyTo = useMessageData((state) => state.setReplyTo)
@@ -66,6 +76,15 @@ export default function ChatItem({
   const [openMetadata, setOpenMetadata] = useState(false)
   const { createdAtTime, createdAtBlock, ownerId, contentId } = message.struct
   const { body, inReplyTo, extensions } = message.content || {}
+  const [openDonateModal, setOpenDonateModal] = useState(false)
+  const address = useMyAccount((state) => state.address)
+
+  const { data: messageOwnerAccountData } =
+    getAccountDataQuery.useQuery(ownerId)
+  const { data: myAccountData } = getAccountDataQuery.useQuery(address)
+
+  const { evmAddress: messageOwnerEvmAddress } = messageOwnerAccountData || {}
+  const { evmAddress: myEvmAddress } = myAccountData || {}
 
   const sendEvent = useSendEvent()
 
@@ -80,12 +99,26 @@ export default function ChatItem({
   }
 
   const getChatMenus = (): FloatingMenusProps['menus'] => {
+    const donateMenuItem: FloatingMenusProps['menus'][number] = {
+      text: 'Donate',
+      icon: DonateCoinIcon,
+      onClick: () => {
+        setOpenDonateModal(true)
+      },
+    }
+
+    const showDonateMenuItem =
+      myEvmAddress &&
+      messageOwnerEvmAddress &&
+      myEvmAddress !== messageOwnerEvmAddress
+
     return [
       {
         text: 'Reply',
         icon: BsFillReplyFill,
         onClick: () => setMessageAsReply(messageId),
       },
+      ...(showDonateMenuItem ? [donateMenuItem] : []),
       {
         text: 'Copy Text',
         icon: MdContentCopy,
@@ -130,8 +163,12 @@ export default function ChatItem({
     dispatch(checkMarkType)
   }
 
-  const isEmojiOnly = shouldRenderEmojiChatItem(body ?? '')
-  const ChatItemContentVariant = isEmojiOnly ? EmojiChatItem : DefaultChatItem
+  const isEmojiOnly = shouldRenderEmojiChatItem(body || '')
+  const DefaultContentVariant = isEmojiOnly ? EmojiChatItem : DefaultChatItem
+
+  const ChatItemContentVariant = extensions
+    ? extensionsVariants[extensions[0].id]
+    : DefaultContentVariant
 
   const relativeTime = getTimeRelativeToNow(createdAtTime)
 
@@ -161,24 +198,17 @@ export default function ChatItem({
               {...referenceProps}
               id={messageBubbleId}
             >
-              {extensions ? (
-                <ChatItemWithExtension
-                  onCheckMarkClick={onCheckMarkClick}
-                  scrollToMessage={scrollToMessage}
-                  message={message}
-                />
-              ) : (
-                <ChatItemContentVariant
-                  body={body ?? ''}
-                  isMyMessage={isMyMessage}
-                  isSent={isSent}
-                  onCheckMarkClick={onCheckMarkClick}
-                  ownerId={ownerId}
-                  relativeTime={relativeTime}
-                  inReplyTo={inReplyTo}
-                  scrollToMessage={scrollToMessage}
-                />
-              )}
+              <ChatItemContentVariant
+                body={body || ''}
+                isMyMessage={isMyMessage}
+                isSent={isSent}
+                onCheckMarkClick={onCheckMarkClick}
+                ownerId={ownerId}
+                relativeTime={relativeTime}
+                inReplyTo={inReplyTo}
+                extensions={extensions}
+                scrollToMessage={scrollToMessage}
+              />
             </div>
           )
         }}
@@ -194,6 +224,13 @@ export default function ChatItem({
         isOpen={openMetadata}
         closeModal={() => setOpenMetadata(false)}
         entity={message}
+      />
+      <DonateModal
+        isOpen={openDonateModal}
+        closeModal={() => setOpenDonateModal(false)}
+        recipient={ownerId}
+        messageId={messageId}
+        chatId={chatId}
       />
     </div>
   )

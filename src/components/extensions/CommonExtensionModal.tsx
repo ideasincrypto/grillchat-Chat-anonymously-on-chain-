@@ -10,7 +10,7 @@ export type CommonExtensionModalProps = ModalProps &
     | 'sendButtonText'
     | 'autofocus'
     | 'onSubmit'
-    | 'mustHaveMessageBody'
+    | 'allowEmptyMessage'
   > & {
     disableSendButton?: boolean
   }
@@ -19,7 +19,7 @@ export default function CommonExtensionModal({
   chatId,
   sendButtonText,
   disableSendButton,
-  mustHaveMessageBody = false,
+  allowEmptyMessage = true,
   autofocus,
   buildAdditionalTxParams,
   onSubmit,
@@ -43,7 +43,7 @@ export default function CommonExtensionModal({
       <ChatForm
         autofocus={!!autofocus}
         chatId={chatId}
-        mustHaveMessageBody={mustHaveMessageBody}
+        allowEmptyMessage={allowEmptyMessage}
         className={cx(isUsingBigButton && 'pb-5 md:pb-6')}
         inputProps={{
           className: cx(

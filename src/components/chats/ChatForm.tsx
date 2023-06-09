@@ -26,16 +26,24 @@ import {
   useState,
 } from 'react'
 
+type BeforeMessageResult = {
+  newMessageParams?: SendMessageParams
+  txPrevented: boolean
+}
+
 export type ChatFormProps = Omit<ComponentProps<'form'>, 'onSubmit'> & {
   chatId: string
   onSubmit?: () => void
   disabled?: boolean
-  mustHaveMessageBody?: boolean
   inputProps?: TextAreaProps
   buildAdditionalTxParams?: () => Partial<SendMessageParams>
   sendButtonText?: string
   sendButtonProps?: ButtonProps
   autofocus?: boolean
+  allowEmptyMessage?: boolean
+  beforeMesageSend?: (
+    messageParams: SendMessageParams
+  ) => Promise<BeforeMessageResult>
 }
 
 function processMessage(message: string) {
@@ -47,12 +55,13 @@ export default function ChatForm({
   chatId,
   onSubmit,
   disabled,
-  mustHaveMessageBody = true,
   inputProps,
   autofocus = true,
   buildAdditionalTxParams,
   sendButtonText,
   sendButtonProps,
+  allowEmptyMessage = false,
+  beforeMesageSend,
   ...props
 }: ChatFormProps) {
   const replyTo = useMessageData((state) => state.replyTo)
@@ -109,13 +118,17 @@ export default function ChatForm({
 
   const shouldSendMessage =
     isRequestingEnergy || (isLoggedIn && hasEnoughEnergy)
-  const isDisabled = mustHaveMessageBody && !processMessage(messageBody)
+  const isDisabled = !processMessage(messageBody) && !allowEmptyMessage
 
   const resetForm = () => {
     setMessageBody('')
     clearReplyTo?.()
   }
-  const handleSubmit = (captchaToken: string | null, e?: SyntheticEvent) => {
+
+  const handleSubmit = async (
+    captchaToken: string | null,
+    e?: SyntheticEvent
+  ) => {
     e?.preventDefault()
     if (
       shouldSendMessage &&
@@ -126,6 +139,7 @@ export default function ChatForm({
     }
 
     const processedMessage = processMessage(messageBody)
+
     if (isDisabled) return
 
     const sendMessageParams = {
@@ -134,9 +148,17 @@ export default function ChatForm({
       replyTo,
       ...buildAdditionalTxParams?.(),
     }
+
+    const { newMessageParams, txPrevented } =
+      (await beforeMesageSend?.(sendMessageParams)) || {}
+
+    if (txPrevented) return
+
+    const messageParams = newMessageParams || sendMessageParams
+
     if (shouldSendMessage) {
       resetForm()
-      sendMessage(sendMessageParams)
+      sendMessage(messageParams)
     } else {
       if (isLoggedIn) {
         sendEvent('request energy')
@@ -147,7 +169,7 @@ export default function ChatForm({
       resetForm()
       requestTokenAndSendMessage({
         captchaToken,
-        ...sendMessageParams,
+        ...messageParams,
       })
       setIsRequestingEnergy(true)
       sendEvent('request energy and send message')
