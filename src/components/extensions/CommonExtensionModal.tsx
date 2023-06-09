@@ -12,6 +12,7 @@ export type CommonExtensionModalProps = ModalProps &
     | 'onSubmit'
     | 'allowEmptyMessage'
   > & {
+    formProps?: ChatFormProps
     disableSendButton?: boolean
   }
 
@@ -21,6 +22,7 @@ export default function CommonExtensionModal({
   disableSendButton,
   allowEmptyMessage = true,
   autofocus,
+  formProps,
   buildAdditionalTxParams,
   onSubmit,
   ...props
@@ -60,6 +62,7 @@ export default function CommonExtensionModal({
           onSubmit?.()
           props.closeModal()
         }}
+        {...formProps}
       />
     </Modal>
   )

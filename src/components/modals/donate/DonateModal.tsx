@@ -204,9 +204,9 @@ export default function DonateModal({
   return (
     <CommonExtensionModal
       {...props}
+      chatId={chatId}
       formProps={{
         chatId,
-        replyTo: messageId,
         allowEmptyMessage: true,
         sendButtonProps: {
           disabled: disableSendButton,

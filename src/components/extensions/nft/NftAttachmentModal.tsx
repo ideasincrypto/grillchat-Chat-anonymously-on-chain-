@@ -77,7 +77,7 @@ export default function NftAttachmentModal(props: NftAttachmentModalProps) {
       <CommonExtensionModal
         {...otherProps}
         isOpen={otherProps.isOpen && !isOpenPopularMarketplaces}
-        mustHaveMessageBody={false}
+        allowEmptyMessage={true}
         chatId={chatId}
         disableSendButton={!isValidNft}
         title='🖼 Attach An NFT'
