@@ -64,7 +64,6 @@ export default function DonateMessagePreview({
   body,
   ownerId,
   relativeTime,
-  senderColor,
   inReplyTo,
   extensions,
   scrollToMessage,
@@ -83,7 +82,7 @@ export default function DonateMessagePreview({
       >
         {!isMyMessage && (
           <div className='flex items-center'>
-            <Name ownerId={ownerId} senderColor={senderColor} />
+            <Name ownerId={ownerId} />
             <span className='text-xs text-[#F9DBC3]'>{relativeTime}</span>
           </div>
         )}

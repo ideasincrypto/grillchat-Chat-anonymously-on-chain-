@@ -1,5 +1,6 @@
 import DonateCoinIcon from '@/assets/icons/donate-coin.svg'
 import AddressAvatar from '@/components/AddressAvatar'
+import NftChatItem from '@/components/extensions/nft/NftChatItem'
 import FloatingMenus, {
   FloatingMenusProps,
 } from '@/components/floating/FloatingMenus'
@@ -34,6 +35,7 @@ import EmojiChatItem, {
 
 const extensionsVariants: Record<string, (props: any) => JSX.Element> = {
   'subsocial-donations': DonateMessagePreview,
+  'subsocial-evm-nft': NftChatItem,
 }
 
 export type ChatItemProps = Omit<ComponentProps<'div'>, 'children'> & {
@@ -168,7 +170,7 @@ export default function ChatItem({
 
   const ChatItemContentVariant = extensions
     ? extensionsVariants[extensions[0].id]
-    : DefaultContentVariant
+    : (DefaultContentVariant as any)
 
   const relativeTime = getTimeRelativeToNow(createdAtTime)
 
@@ -199,6 +201,7 @@ export default function ChatItem({
               id={messageBubbleId}
             >
               <ChatItemContentVariant
+                message={message}
                 body={body || ''}
                 isMyMessage={isMyMessage}
                 isSent={isSent}
