@@ -11,6 +11,8 @@ export type CommonExtensionModalProps = ModalProps &
     | 'autofocus'
     | 'onSubmit'
     | 'allowEmptyMessage'
+    | 'sendButtonProps'
+    | 'beforeMesageSend'
   > & {
     formProps?: ChatFormProps
     disableSendButton?: boolean
@@ -22,7 +24,8 @@ export default function CommonExtensionModal({
   disableSendButton,
   allowEmptyMessage = true,
   autofocus,
-  formProps,
+  beforeMesageSend,
+  sendButtonProps,
   buildAdditionalTxParams,
   onSubmit,
   ...props
@@ -54,15 +57,20 @@ export default function CommonExtensionModal({
           ),
         }}
         sendButtonProps={{
+          ...sendButtonProps,
           disabled: disableSendButton,
-          className: cx(!isUsingBigButton ? 'mr-4' : 'mx-5 md:px-6'),
+          className: cx(
+            !isUsingBigButton ? 'mr-4' : 'mx-5 md:px-6',
+            sendButtonProps?.className
+          ),
         }}
+        sendButtonText={sendButtonText}
+        beforeMesageSend={beforeMesageSend}
         buildAdditionalTxParams={buildAdditionalTxParams}
         onSubmit={() => {
           onSubmit?.()
           props.closeModal()
         }}
-        {...formProps}
       />
     </Modal>
   )

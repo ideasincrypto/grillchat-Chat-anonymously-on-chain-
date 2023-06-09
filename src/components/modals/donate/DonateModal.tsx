@@ -201,19 +201,16 @@ export default function DonateModal({
     !amount ||
     new BigNumber(amount || '0').eq(0)
 
+  console.log('disable send button', disableSendButton)
+
   return (
     <CommonExtensionModal
       {...props}
       chatId={chatId}
-      formProps={{
-        chatId,
-        allowEmptyMessage: true,
-        sendButtonProps: {
-          disabled: disableSendButton,
-        },
-        sendButtonText: 'Send',
-        beforeMesageSend: onButtonClick,
-      }}
+      allowEmptyMessage
+      sendButtonText='Send'
+      disableSendButton={disableSendButton}
+      beforeMesageSend={onButtonClick}
       title='💰 Donate'
       withCloseButton
       {...props}

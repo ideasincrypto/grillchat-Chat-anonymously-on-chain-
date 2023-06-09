@@ -216,6 +216,8 @@ export default function ChatForm({
             </Button>
           )
 
+          console.log(sendButtonProps?.className, 'className')
+
           return (
             <form
               onSubmit={submitForm}
