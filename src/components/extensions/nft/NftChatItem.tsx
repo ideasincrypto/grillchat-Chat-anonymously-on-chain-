@@ -31,8 +31,12 @@ export default function NftChatItem(props: Props) {
     }
   )
 
-  const { IntegratedSkeleton: NftDataSkeleton } =
-    useIntegratedSkeleton(isLoadingNftData)
+  const { IntegratedSkeleton: NftDataSkeleton } = useIntegratedSkeleton(
+    isLoadingNftData,
+    {
+      showLoadingIfNoContent: true,
+    }
+  )
   // const { IntegratedSkeleton: NftPriceSkeleton } =
   //   useIntegratedSkeleton(isLoadingNftPrice)
 

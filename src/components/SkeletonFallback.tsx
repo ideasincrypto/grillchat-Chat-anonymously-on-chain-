@@ -65,9 +65,21 @@ export function useIntegratedSkeleton(
   }, [data])
 }
 
-function generateLoadingChecker(isLoading: boolean, isFetched = true) {
+function generateLoadingChecker(
+  isLoading: boolean,
+  config: {
+    isFetched: boolean
+    showLoadingIfNoContent: boolean
+  }
+) {
+  const { isFetched = true, showLoadingIfNoContent = false } = config
+
   const loadingChecker = (content: any) =>
-    !!(isLoading || (!content && !isFetched))
+    !!(
+      isLoading ||
+      (!content && !isFetched) ||
+      (showLoadingIfNoContent && !content)
+    )
   return {
     loadingChecker,
     getContent: <Content, Default>(content: Content, defaultContent: Default) =>
