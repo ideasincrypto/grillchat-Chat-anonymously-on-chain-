@@ -75,6 +75,8 @@ export default function MediaLoader({
           controls
           playsInline
           loop
+          autoPlay
+          muted
         />
       )
     } else if (typeof usedImage === 'string' && usedImage.startsWith('data:')) {
