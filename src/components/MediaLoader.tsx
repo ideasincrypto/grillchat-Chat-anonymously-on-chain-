@@ -73,7 +73,6 @@ export default function MediaLoader({
           onLoadedData={onLoad}
           className={cx(commonClassName, 'aspect-square')}
           controls
-          autoPlay
           playsInline
           loop
         />
