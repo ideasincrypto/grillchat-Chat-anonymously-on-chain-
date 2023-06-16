@@ -73,9 +73,9 @@ export default function MediaLoader({
           onLoadedData={onLoad}
           className={cx(commonClassName, 'aspect-square')}
           controls
-        >
-          <source src={commonProps.src} />
-        </video>
+          autoPlay
+          playsInline
+        />
       )
     } else if (typeof usedImage === 'string' && usedImage.startsWith('data:')) {
       // width and height props will make iframe not square in clickable media
