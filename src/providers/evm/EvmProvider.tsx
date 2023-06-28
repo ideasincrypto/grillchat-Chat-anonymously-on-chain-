@@ -9,6 +9,7 @@ import {
 import {
   argentWallet,
   coinbaseWallet,
+  injectedWallet,
   ledgerWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
@@ -19,6 +20,7 @@ import { talismanWallet } from './wallets/talisman'
 const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
 
 const commonWallets = [
+  injectedWallet({ chains }),
   walletConnectWallet({
     chains,
     projectId: '9c7e3c90bc38f2ae92e7545d497c39d3',
