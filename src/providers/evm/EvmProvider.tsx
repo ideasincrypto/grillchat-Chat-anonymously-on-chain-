@@ -24,15 +24,20 @@ const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
 function getSupportedWallet(isTouchDevice: boolean) {
   const projectId = getEvmProjectId()
   const supportedWallets = [
+    injectedWallet({ chains }),
     walletConnectWallet({ chains, projectId }),
-    talismanWallet({ chains }),
-    argentWallet({ chains, projectId }),
-    coinbaseWallet({ chains, appName: '' }),
-    ledgerWallet({ chains, projectId }),
-    // subWalletWallet({ chains }),
   ]
   if (!isTouchDevice) {
-    supportedWallets.unshift(metaMaskWallet({ chains, projectId }))
+    supportedWallets.unshift(
+      ...[
+        talismanWallet({ chains }),
+        argentWallet({ chains, projectId }),
+        coinbaseWallet({ chains, appName: '' }),
+        ledgerWallet({ chains, projectId }),
+        metaMaskWallet({ chains, projectId }),
+        // subWalletWallet({ chains }),
+      ]
+    )
   }
   return supportedWallets
 }
@@ -110,11 +115,7 @@ const EvmProvider = ({ children }: EvmProviderProps) => {
   const connectors = connectorsForWallets([
     {
       groupName: 'Popular',
-      wallets: [
-        injectedWallet({ chains }),
-        metaMaskWallet({ chains, projectId: getEvmProjectId() }),
-        walletConnectWallet({ chains, projectId: getEvmProjectId() }),
-      ],
+      wallets: getSupportedWallet(isTouch),
     },
   ])
   const wagmiConfig = createConfig({
