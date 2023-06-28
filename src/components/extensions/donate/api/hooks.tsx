@@ -18,7 +18,6 @@ import { DonateModalStep } from '../DonateModal/types'
 import { tokensItems } from '../DonateModal/utils'
 import { chainIdByChainName, contractsByChainName } from './config'
 import {
-  getConnector,
   getWalletFromStorage,
   openMobileWallet,
   tryParseDecimals,
@@ -32,7 +31,6 @@ export const useConnectOrSwitchNetwork = (
   const { isConnected } = useAccount()
 
   const destChainId = chainIdByChainName[chainName]
-  const connector = getConnector()
 
   const {
     switchNetwork,
@@ -46,7 +44,7 @@ export const useConnectOrSwitchNetwork = (
         const currentChainId = chain.id
 
         if (currentChainId !== destChainId) {
-          isTouchDevice() && (await openMobileWallet({ connector }))
+          isTouchDevice() && (await openMobileWallet())
           switchNetwork?.(destChainId)
         }
       },
@@ -82,7 +80,7 @@ export const useConnectOrSwitchNetwork = (
     if (!isConnected) {
       openConnectModal?.()
     } else {
-      isTouchDevice() && (await openMobileWallet({ connector }))
+      isTouchDevice() && (await openMobileWallet())
       switchNetwork?.(destChainId)
     }
   }
@@ -118,8 +116,7 @@ export const useDonate = (token: string, chainName: string) => {
   ) => {
     setCurrentStep('wallet-action-required')
 
-    const connector = getConnector()
-    isTouchDevice() && (await openMobileWallet({ connector }))
+    isTouchDevice() && (await openMobileWallet())
     if (getWalletFromStorage() === 'subwallet') switchNetwork?.(chainId)
 
     try {

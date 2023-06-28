@@ -3,7 +3,10 @@ import { getConfiguredChains } from '@/providers/utils'
 import { getEvmProjectId } from '@/utils/env/client'
 import { LocalStorage } from '@/utils/storage'
 import { InstructionStepName } from '@rainbow-me/rainbowkit/dist/wallets/Wallet'
-import { walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
+import {
+  metaMaskWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 import { Chain, Connector } from 'wagmi'
 
 const WAGMI_WALLET = 'wagmi.wallet'
@@ -51,24 +54,22 @@ const getWallet = (chains: Chain[]) => {
     ? supportedWallets.find((wallet) => wallet.id === currentWalletId)
     : walletConnectWallet({ chains, projectId: getEvmProjectId() })
 
+  const usedWallet =
+    wallet || walletConnectWallet({ chains, projectId: getEvmProjectId() })
+  console.log('INI WALLET NYA', usedWallet, currentWalletId)
+
   return wallet
     ? wallet
     : walletConnectWallet({ chains, projectId: getEvmProjectId() })
 }
 
-export const getConnector = () => {
+export const openMobileWallet = async () => {
   const { chains } = getConfiguredChains()
+  const connector = metaMaskWallet({
+    chains,
+    projectId: getEvmProjectId(),
+  }).createConnector()
 
-  const wallet = getWallet(chains)
-
-  return wallet.createConnector()
-}
-
-type OpenWalletProps = {
-  connector: RainbowKitConnector<Connector<any, any>>
-}
-
-export const openMobileWallet = async ({ connector }: OpenWalletProps) => {
   const getUri = connector.mobile?.getUri
   if (getUri) {
     const mobileUri = await getUri()
