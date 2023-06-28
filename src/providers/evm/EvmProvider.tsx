@@ -11,7 +11,7 @@ import {
   coinbaseWallet,
   ledgerWallet,
   walletConnectWallet,
-} from '@rainbow-me/rainbowkit/dist/wallets/walletConnectors'
+} from '@rainbow-me/rainbowkit/wallets'
 import { createConfig, WagmiConfig } from 'wagmi'
 import { getConfiguredChains } from '../utils'
 import { talismanWallet } from './wallets/talisman'
