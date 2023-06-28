@@ -2,14 +2,15 @@ import useGetTheme from '@/hooks/useGetTheme'
 import { isTouchDevice } from '@/utils/device'
 import { getEvmProjectId } from '@/utils/env/client'
 import {
+  connectorsForWallets,
   darkTheme,
-  getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
 import {
   argentWallet,
   coinbaseWallet,
+  injectedWallet,
   ledgerWallet,
   metaMaskWallet,
   walletConnectWallet,
@@ -106,11 +107,16 @@ const EvmProvider = ({ children }: EvmProviderProps) => {
   const appTheme = useGetTheme()
   const rainbowkitThemes = getRainbowkitThemes()
 
-  const { connectors } = getDefaultWallets({
-    appName: 'Grill.chat',
-    chains,
-    projectId: '9c7e3c90bc38f2ae92e7545d497c39d3',
-  })
+  const connectors = connectorsForWallets([
+    {
+      groupName: 'Popular',
+      wallets: [
+        injectedWallet({ chains }),
+        metaMaskWallet({ chains, projectId: getEvmProjectId() }),
+        walletConnectWallet({ chains, projectId: getEvmProjectId() }),
+      ],
+    },
+  ])
   const wagmiConfig = createConfig({
     autoConnect: true,
     connectors,
