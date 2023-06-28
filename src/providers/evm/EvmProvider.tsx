@@ -10,7 +10,6 @@ import {
   argentWallet,
   coinbaseWallet,
   ledgerWallet,
-  metaMaskWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 import { createConfig, WagmiConfig } from 'wagmi'
@@ -20,8 +19,10 @@ import { talismanWallet } from './wallets/talisman'
 const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
 
 const commonWallets = [
-  metaMaskWallet({ chains }),
-  walletConnectWallet({ chains }),
+  walletConnectWallet({
+    chains,
+    projectId: '9c7e3c90bc38f2ae92e7545d497c39d3',
+  }),
 ]
 
 const desktopWallets = [
