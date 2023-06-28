@@ -45,3 +45,10 @@ export function getGaId() {
 export function getSquidUrl() {
   return checkEnv(process.env.NEXT_PUBLIC_SQUID_URL, 'NEXT_PUBLIC_SQUID_URL')
 }
+
+export function getEvmProjectId() {
+  return checkEnv(
+    process.env.NEXT_PUBLIC_EVM_PROJECT_ID,
+    'NEXT_PUBLIC_EVM_PROJECT_ID'
+  )
+}

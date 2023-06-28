@@ -1,42 +1,21 @@
 import useGetTheme from '@/hooks/useGetTheme'
-import { isTouchDevice } from '@/utils/device'
 import {
-  connectorsForWallets,
   darkTheme,
+  getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
-import {
-  argentWallet,
-  coinbaseWallet,
-  ledgerWallet,
-  metaMaskWallet,
-} from '@rainbow-me/rainbowkit/wallets'
 import { createConfig, WagmiConfig } from 'wagmi'
 import { getConfiguredChains } from '../utils'
-import { talismanWallet } from './wallets/talisman'
 
 const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
 
-const commonWallets = [metaMaskWallet({ chains })]
-
-const desktopWallets = [
-  ...commonWallets,
-  talismanWallet({ chains }),
-  argentWallet({ chains }),
-  coinbaseWallet({ chains, appName: '' }),
-  ledgerWallet({ chains }),
-  // subWalletWallet({ chains }),
-]
-
-const mobileWallets = [...commonWallets]
-
-const connectors = connectorsForWallets([
-  {
-    groupName: 'Recommended',
-    wallets: isTouchDevice() ? mobileWallets : desktopWallets,
-  },
-])
+export const supportedEvmWallets = getDefaultWallets({
+  appName: 'Grill.chat',
+  chains,
+  projectId: '9c7e3c90bc38f2ae92e7545d497c39d3',
+})
+const { connectors } = supportedEvmWallets
 
 const wagmiConfig = createConfig({
   autoConnect: true,

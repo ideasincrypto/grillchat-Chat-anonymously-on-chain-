@@ -1,5 +1,6 @@
 import { talismanWallet } from '@/providers/evm/wallets/talisman'
 import { getConfiguredChains } from '@/providers/utils'
+import { getEvmProjectId } from '@/utils/env/client'
 import { LocalStorage } from '@/utils/storage'
 import {
   InstructionStepName,
@@ -53,11 +54,11 @@ export type RainbowKitConnector<C extends Connector = Connector> = {
 
 const getWallet = (chains: Chain[]) => {
   const supportedWallets: Record<string, Wallet> = {
-    metamask: metaMaskWallet({ chains }),
+    metamask: metaMaskWallet({ chains, projectId: getEvmProjectId() }),
     talisman: talismanWallet({ chains }),
-    argent: argentWallet({ chains }),
+    argent: argentWallet({ chains, projectId: getEvmProjectId() }),
     coinbase: coinbaseWallet({ chains, appName: '' }),
-    ledger: ledgerWallet({ chains }),
+    ledger: ledgerWallet({ chains, projectId: getEvmProjectId() }),
     // subwallet: subWalletWallet({ chains }),
   }
 
@@ -65,9 +66,11 @@ const getWallet = (chains: Chain[]) => {
 
   const wallet = currentWalletId
     ? supportedWallets[currentWalletId]
-    : metaMaskWallet({ chains })
+    : metaMaskWallet({ chains, projectId: getEvmProjectId() })
 
-  return wallet ? wallet : metaMaskWallet({ chains })
+  return wallet
+    ? wallet
+    : metaMaskWallet({ chains, projectId: getEvmProjectId() })
 }
 
 export const getConnector = () => {
