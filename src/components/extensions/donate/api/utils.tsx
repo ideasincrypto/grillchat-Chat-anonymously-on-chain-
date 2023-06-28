@@ -1,17 +1,9 @@
-import { talismanWallet } from '@/providers/evm/wallets/talisman'
+import { supportedWallets } from '@/providers/evm/EvmProvider'
 import { getConfiguredChains } from '@/providers/utils'
 import { getEvmProjectId } from '@/utils/env/client'
 import { LocalStorage } from '@/utils/storage'
-import {
-  InstructionStepName,
-  Wallet,
-} from '@rainbow-me/rainbowkit/dist/wallets/Wallet'
-import {
-  argentWallet,
-  coinbaseWallet,
-  ledgerWallet,
-  metaMaskWallet,
-} from '@rainbow-me/rainbowkit/wallets'
+import { InstructionStepName } from '@rainbow-me/rainbowkit/dist/wallets/Wallet'
+import { walletConnectWallet } from '@rainbow-me/rainbowkit/wallets'
 import { Chain, Connector } from 'wagmi'
 
 const WAGMI_WALLET = 'wagmi.wallet'
@@ -53,24 +45,15 @@ export type RainbowKitConnector<C extends Connector = Connector> = {
 }
 
 const getWallet = (chains: Chain[]) => {
-  const supportedWallets: Record<string, Wallet> = {
-    metamask: metaMaskWallet({ chains, projectId: getEvmProjectId() }),
-    talisman: talismanWallet({ chains }),
-    argent: argentWallet({ chains, projectId: getEvmProjectId() }),
-    coinbase: coinbaseWallet({ chains, appName: '' }),
-    ledger: ledgerWallet({ chains, projectId: getEvmProjectId() }),
-    // subwallet: subWalletWallet({ chains }),
-  }
-
   const currentWalletId = getWalletFromStorage()
 
   const wallet = currentWalletId
-    ? supportedWallets[currentWalletId]
-    : metaMaskWallet({ chains, projectId: getEvmProjectId() })
+    ? supportedWallets.find((wallet) => wallet.id === currentWalletId)
+    : walletConnectWallet({ chains, projectId: getEvmProjectId() })
 
   return wallet
     ? wallet
-    : metaMaskWallet({ chains, projectId: getEvmProjectId() })
+    : walletConnectWallet({ chains, projectId: getEvmProjectId() })
 }
 
 export const getConnector = () => {

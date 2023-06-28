@@ -3,35 +3,34 @@ import { getEvmProjectId } from '@/utils/env/client'
 import {
   connectorsForWallets,
   darkTheme,
-  getDefaultWallets,
   lightTheme,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
+import {
+  argentWallet,
+  coinbaseWallet,
+  ledgerWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/dist/wallets/walletConnectors'
 import { createConfig, WagmiConfig } from 'wagmi'
 import { getConfiguredChains } from '../utils'
 import { talismanWallet } from './wallets/talisman'
 
 const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
-
-export const supportedEvmWallets = getDefaultWallets({
-  appName: 'Grill.chat',
-  chains,
-  projectId: '9c7e3c90bc38f2ae92e7545d497c39d3',
-})
-// const { connectors } = supportedEvmWallets
-
-const { wallets } = getDefaultWallets({
-  appName: 'My RainbowKit App',
-  projectId: getEvmProjectId(),
-  chains,
-})
+export const supportedWallets = [
+  walletConnectWallet({ chains, projectId: getEvmProjectId() }),
+  talismanWallet({ chains }),
+  argentWallet({ chains, projectId: getEvmProjectId() }),
+  coinbaseWallet({ chains, appName: '' }),
+  ledgerWallet({ chains, projectId: getEvmProjectId() }),
+  // subWalletWallet({ chains }),
+]
 
 const connectors = connectorsForWallets([
   {
-    groupName: 'Recommended',
-    wallets: [talismanWallet({ chains })],
+    groupName: 'Popular',
+    wallets: supportedWallets,
   },
-  ...wallets,
 ])
 
 const wagmiConfig = createConfig({
