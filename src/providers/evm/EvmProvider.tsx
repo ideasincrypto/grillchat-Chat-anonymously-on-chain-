@@ -1,5 +1,7 @@
 import useGetTheme from '@/hooks/useGetTheme'
+import { getEvmProjectId } from '@/utils/env/client'
 import {
+  connectorsForWallets,
   darkTheme,
   getDefaultWallets,
   lightTheme,
@@ -7,6 +9,7 @@ import {
 } from '@rainbow-me/rainbowkit'
 import { createConfig, WagmiConfig } from 'wagmi'
 import { getConfiguredChains } from '../utils'
+import { talismanWallet } from './wallets/talisman'
 
 const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
 
@@ -15,7 +18,21 @@ export const supportedEvmWallets = getDefaultWallets({
   chains,
   projectId: '9c7e3c90bc38f2ae92e7545d497c39d3',
 })
-const { connectors } = supportedEvmWallets
+// const { connectors } = supportedEvmWallets
+
+const { wallets } = getDefaultWallets({
+  appName: 'My RainbowKit App',
+  projectId: getEvmProjectId(),
+  chains,
+})
+
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [talismanWallet({ chains })],
+  },
+  ...wallets,
+])
 
 const wagmiConfig = createConfig({
   autoConnect: true,
