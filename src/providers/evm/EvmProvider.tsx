@@ -1,4 +1,5 @@
 import useGetTheme from '@/hooks/useGetTheme'
+import { isTouchDevice } from '@/utils/device'
 import { getEvmProjectId } from '@/utils/env/client'
 import {
   connectorsForWallets,
@@ -10,35 +11,30 @@ import {
   argentWallet,
   coinbaseWallet,
   ledgerWallet,
+  metaMaskWallet,
   walletConnectWallet,
 } from '@rainbow-me/rainbowkit/wallets'
+import { useEffect, useState } from 'react'
 import { createConfig, WagmiConfig } from 'wagmi'
 import { getConfiguredChains } from '../utils'
 import { talismanWallet } from './wallets/talisman'
 
 const { chains, publicClient, webSocketPublicClient } = getConfiguredChains()
-export const supportedWallets = [
-  walletConnectWallet({ chains, projectId: getEvmProjectId() }),
-  talismanWallet({ chains }),
-  argentWallet({ chains, projectId: getEvmProjectId() }),
-  coinbaseWallet({ chains, appName: '' }),
-  ledgerWallet({ chains, projectId: getEvmProjectId() }),
-  // subWalletWallet({ chains }),
-]
-
-const connectors = connectorsForWallets([
-  {
-    groupName: 'Popular',
-    wallets: supportedWallets,
-  },
-])
-
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-  webSocketPublicClient,
-})
+function getSupportedWallet(isTouchDevice: boolean) {
+  const projectId = getEvmProjectId()
+  const supportedWallets = [
+    walletConnectWallet({ chains, projectId }),
+    talismanWallet({ chains }),
+    argentWallet({ chains, projectId }),
+    coinbaseWallet({ chains, appName: '' }),
+    ledgerWallet({ chains, projectId }),
+    // subWalletWallet({ chains }),
+  ]
+  if (!isTouchDevice) {
+    supportedWallets.unshift(metaMaskWallet({ chains, projectId }))
+  }
+  return supportedWallets
+}
 
 const accentColor = '#4D46DC'
 
@@ -101,9 +97,28 @@ type EvmProviderProps = {
 }
 
 const EvmProvider = ({ children }: EvmProviderProps) => {
-  const appTheme = useGetTheme()
+  const [isTouch, setIsTouch] = useState(false)
 
+  useEffect(() => {
+    setIsTouch(isTouchDevice())
+  }, [])
+
+  const appTheme = useGetTheme()
   const rainbowkitThemes = getRainbowkitThemes()
+
+  const supportedWallets = getSupportedWallet(isTouch)
+  const connectors = connectorsForWallets([
+    {
+      groupName: 'Popular',
+      wallets: supportedWallets,
+    },
+  ])
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient,
+    webSocketPublicClient,
+  })
 
   return (
     <WagmiConfig config={wagmiConfig}>
