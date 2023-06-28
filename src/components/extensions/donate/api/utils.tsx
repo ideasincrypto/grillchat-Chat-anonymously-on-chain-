@@ -1,8 +1,7 @@
 import { getConfiguredChains } from '@/providers/utils'
-import { getEvmProjectId } from '@/utils/env/client'
 import { LocalStorage } from '@/utils/storage'
 import { InstructionStepName } from '@rainbow-me/rainbowkit/dist/wallets/Wallet'
-import { metaMaskWallet } from '@rainbow-me/rainbowkit/wallets'
+import { injectedWallet } from '@rainbow-me/rainbowkit/wallets'
 import { Connector } from 'wagmi'
 
 const WAGMI_WALLET = 'wagmi.wallet'
@@ -45,9 +44,8 @@ export type RainbowKitConnector<C extends Connector = Connector> = {
 
 export const openMobileWallet = async () => {
   const { chains } = getConfiguredChains()
-  const connector = metaMaskWallet({
+  const connector = injectedWallet({
     chains,
-    projectId: getEvmProjectId(),
   }).createConnector()
 
   const getUri = connector.mobile?.getUri
