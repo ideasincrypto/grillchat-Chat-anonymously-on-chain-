@@ -1,7 +1,11 @@
+import ProcessingHumster from '@/assets/graphics/processing-humster.png'
 import Button from '@/components/Button'
 import EvmAddress from '@/components/EvmAddress'
 import useSignMessageAndLinkEvmAddress from '@/hooks/useSignMessageAndLinkEvmAddress'
 import { cx } from '@/utils/class-names'
+import { isTouchDevice } from '@/utils/device'
+import { openMobileWallet } from '@/utils/evm'
+import Image from 'next/image'
 import { useAccount } from 'wagmi'
 import { CustomConnectButton } from '../../CustomConnectButton'
 import { ContentProps } from '../types'
@@ -32,6 +36,33 @@ function LinkEvmAddressContent({ evmAddress, setCurrentState }: ContentProps) {
       variant={isNotEqAddresses ? 'primaryOutline' : 'primary'}
     />
   )
+
+  const { connector } = useAccount()
+
+  if (isLoading) {
+    const onButtonClick = async () => {
+      await openMobileWallet({ connector: connector as any })
+    }
+
+    return (
+      <div className='flex w-full flex-col items-center gap-4'>
+        <Image
+          className='w-64 max-w-xs rounded-full'
+          priority
+          src={ProcessingHumster}
+          alt=''
+        />
+
+        {isTouchDevice() && (
+          <Button className='w-full' size={'lg'} onClick={onButtonClick}>
+            Open wallet
+          </Button>
+        )}
+
+        {connectionButton}
+      </div>
+    )
+  }
 
   return (
     <div>

@@ -23,10 +23,12 @@ const modalContents: {
   logout: LogoutContent,
   'share-session': ShareSessionContent,
   about: AboutContent,
+
   'link-evm-address': LinkEvmAddressContent,
   'evm-linking-error': EvmLoginError,
   'unlink-evm-confirmation': UnlinkEvmConfirmationContent,
   'evm-address-linked': CommonEvmAddressLinked,
+
   notifications: NotificationContent,
   'telegram-notifications': TelegramNotificationContent,
 }

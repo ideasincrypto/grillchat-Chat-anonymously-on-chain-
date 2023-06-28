@@ -1,5 +1,6 @@
 import Toast from '@/components/Toast'
 import useToastError from '@/hooks/useToastError'
+import { openMobileWallet } from '@/utils/evm'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useEffect, useMemo } from 'react'
 import { toast } from 'react-hot-toast'
@@ -17,12 +18,7 @@ import { isTouchDevice } from '../../../../utils/device'
 import { DonateModalStep } from '../DonateModal/types'
 import { tokensItems } from '../DonateModal/utils'
 import { chainIdByChainName, contractsByChainName } from './config'
-import {
-  getConnector,
-  getWalletFromStorage,
-  openMobileWallet,
-  tryParseDecimals,
-} from './utils'
+import { getConnector, getWalletFromStorage, tryParseDecimals } from './utils'
 
 export const useConnectOrSwitchNetwork = (
   setCurrentStep: (currentStep: DonateModalStep) => void,
